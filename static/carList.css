@@ -1,0 +1,31 @@
+.btn {
+    padding: 5px;
+    margin: 10px 0;
+}
+
+.left, .right {
+    display: inline-block;
+}
+
+.d-flex {
+    display: flex;
+    margin-top: 15px;
+}
+
+.l-flex {
+    display: flex;
+}
+
+
+.d-flex:first-of-type {
+    justify-content: space-between;
+
+}
+
+h3 {
+    margin-top: 0px;
+}
+
+td {
+    border: 1px solid gray;
+}

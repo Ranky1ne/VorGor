@@ -1,0 +1,29 @@
+body {
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #dfe1f3;
+}
+
+.card__wrapper {
+    padding: 10px;
+    background-color: #fff;
+    display: inline-block;
+}
+
+textarea {
+    width: 450px;
+    height: 80px;
+    resize: none;
+}
+
+
+
+/* Заголовку нельзя задать :first-child поэтому вот так */
+.first__h3 {
+    margin-top: 0px;
+}
+
+.btn {
+    margin-top: 10px;
+    width: 100%;
+	height: 40px;
+}

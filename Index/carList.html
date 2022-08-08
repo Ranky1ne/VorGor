@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+        <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/main.css">
+    <link href="../static/carList.css" rel="stylesheet" type="text/css">
+    <!-- JS -->
+    <script src="../API/carList.js"></script>
+        
+	</head>
+    <body onload="loadCarList()">
+        
+        <div class="burger-menu">
+            <a href="" class="burger-menu_button">
+              <spun class="burger-menu_lines"></spun>
+            </a>
+            <nav class="burger-menu_nav">
+              <a href="/home" class="burger-menu_link">Заявки</a>
+              <a href="/newForm" class="burger-menu_link">Новая заявка</a>
+              <a href="/operator" class="burger-menu_link">Оператор</a>
+              <a href="#section-4" class="burger-menu_link">Изменить заявку</a>
+              <form action="/exit"><a href="/" action class="burger-menu_link5">Выход</a></form>
+            </nav>
+            <div class="burger-menu_overlay"></div>
+          </div>
+        
+          
+        <div class="container">
+          <div class="main">
+                <input class="search" type="search" id="site-search" name="q" placeholder="Поиск машин">
+                <div class="d-flex">
+                  <div>
+                    <div class="l-flex">
+                        <div class="left">
+                          <h3>Номер машины</h3>
+                          <input name="carNumber" id="carNumber" type="text" pattern="[А-Я]/s[0-9]{3}/s[А-Я]{2}" required>
+                        </div>
+                        <div class="right">
+                          <h3>Объем, м³</h3>
+                          <input type="number" min="0"  name="carVolume" id="carVolume" required>
+                        </div>
+                      </div>
+                      <input name="carId" id="carId" type="hidden">
+                      <button class="btn" onclick="addCar()">save</button>
+                    </div>
+            
+                <div class="carList">
+                    <table class="list" id="tableList">
+                        
+                    </table>
+                </div>
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+
+      <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="/API/home.js"></script>
+    
+
+    </body>
+</html>

@@ -1,0 +1,33 @@
+/* Button */
+
+.btn {
+  padding: 8px;
+}
+
+.active {
+	top: 3px;
+	border: 1px solid #778998;
+	border-top: 1px solid #606F7A;
+	border-bottom: 1px solid #8296A6;
+	background: #92A9BA;
+	box-shadow: inset 0 1px 2px #5F7281;
+}
+
+.active:hover {
+	top: 3px;
+	border: 1px solid #778998;
+	border-top: 1px solid #606F7A;
+	border-bottom: 1px solid #8296A6;
+	background: #92A9BA;
+	box-shadow: inset 0 1px 2px #5F7281;
+}
+
+/* Cards */
+
+.main-car-button {
+  margin: 0 10px 10px 0;
+}
+
+#site-search{
+	align-self: center;
+}

@@ -1,0 +1,65 @@
+function $_GET(arr) {
+    let res = [];
+    for (let key in arr) {  
+    let p = window.location.search;
+    p = p.match(new RegExp(arr[key] + '=([^&=]+)'));
+    let a = p ? p[1] : false;
+    res.push(a);
+    }
+    return res
+}
+
+
+
+
+function loadCarList (){
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        document.getElementsByClassName('list').innerHTML = '';
+        if(this.readyState == 4 && this.status == 200){
+            let result = this.responseText;
+            let results = JSON.parse(result);
+            console.log(results)  
+            let data = $_GET(['carList']);   
+            document.querySelector('#carId').value = data;
+            console.log(data)
+            results.forEach(elem => {
+                if(data == elem.orderId){
+                    if (elem['Номер машины'] !== null){
+                        document.querySelector(`.list`).insertAdjacentHTML("beforeend", '<tr class="headerTable"><td>Номер машины</td><td>Объем, м³</td></tr>')
+                        let row = document.createElement('tr');
+                        row.innerHTML = `<td cosplan="2">${elem['Номер машины']}</td><td cosplan ="2">${elem['Объем, м3']}</td>`
+                        document.querySelector(`.list`).appendChild(row);
+                        row = document.createElement('div');
+                        row.className = 'deleteBut';
+                        row.innerHTML = ` <form  class="deleteCar" id="deleteBut${elem.id}"  action="/deleteCar" method="post">`
+                        document.querySelector(`.list`).appendChild(row);
+                        document.querySelector(`#deleteBut${elem.id}`).innerHTML = `<input type="hidden" name="carOrderId" id="carOrderId${elem.orderId}" value="${elem.orderId}"><input name="deleteCar" type="hidden" value="${elem.id}"><button class="btn" >Delete</button>`;
+                       
+                    }
+                }
+            })
+        }
+    }
+    xhttp.open('GET','/carListData',true);
+    xhttp.send()
+};
+
+function addCar(){
+    let xhttp = new XMLHttpRequest();
+    let carId = $_GET(['carList'])
+    let carNumber = document.getElementById('carNumber').value;
+    let carVolume = document.getElementById('carVolume').value;
+    xhttp.onreadystatechange = function(){
+        console.log(document.getElementById('carNumber').value)
+        if(this.readyState == 4 && this.status == 200){
+            document.getElementById('tableList').innerHTML = "";
+           
+            loadCarList();
+
+        }
+    }
+    xhttp.open('POST','/addCar',true);
+    xhttp.setRequestHeader("Content-Type","application/json")
+    xhttp.send(`{"carId": ${carId},"carNumber": "${carNumber}", "carVolume": ${carVolume}}`)
+}
