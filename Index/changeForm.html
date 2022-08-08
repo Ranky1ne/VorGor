@@ -14,7 +14,7 @@
         <link href="../static/newForm.css" rel="stylesheet" type="text/css">
         <script src="/API/changeOrder.js"></script>
 	</head>
-    <body>
+    <body onload="changeOrder()">
         <!-- Старый код
             <div class="container">
             <h1>Изменить заявку</h1>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="string">
                             <h3>Объем</h3>
-                            <textarea type="number" name="changeVolume" id="changeVolume" placeholder="Объем" required></textarea>
+                            <input type="number" name="changeVolume" id="changeVolume" placeholder="Объем" required>
                         </div>
                         <div class="string">
                             <h3>Сырье</h3>

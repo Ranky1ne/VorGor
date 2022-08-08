@@ -16,7 +16,7 @@ now= now.toString();
 let dottDel= now.indexOf('G');
 now = now.slice(0,dottDel-1);
 
-let carData = [];
+
 
 function ttn(){
 
@@ -34,6 +34,7 @@ function ttn(){
                     
                     if(carId == elem.id){
                         for(let key in elem){
+                            let carData = [];
                          carData.push(elem[key]) ;
                         
                             

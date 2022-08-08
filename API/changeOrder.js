@@ -1,18 +1,32 @@
-'use strict'
-var myRequest = new XMLHttpRequest();
-var requestURL = './dataChange.json';
-myRequest.open('GET', requestURL);
-myRequest.responseType = 'json';
-myRequest.send();
-myRequest.onload = function() {
-    var data = myRequest.response;
-    document.querySelector('#changerId').value = data[0].id;
-    document.querySelector('#changeCustomer').value = data[0].Заказчик;
-    document.querySelector('#changeCarrier').value = data[0].Перевозчик;
-    document.querySelector('#changeVolume').value = data[0].Объем;
-    document.querySelector('#changeRawMaterial').value = data[0].Сырье;
-    document.querySelector('#changeEtc').value = data[0]['и тд.'];
+function $_GET(arr) {
+    let res = [];
+    for (let key in arr) {  
+    let p = window.location.search;
+    p = p.match(new RegExp(arr[key] + '=([^&=]+)'));
+    let a = p ? p[1] : false;
+    res.push(a);
+    }
+    return res
+}
 
-
-
+function changeOrder(){
+    let xhttp = new XMLHttpRequest();
+    let orderId = $_GET(['changeOrder']);
+    console.log(orderId)
+    xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            let result = this.responseText;
+            let results = JSON.parse(result);
+            console.log(results[0].id)  
+            document.querySelector('#changerId').value = results[0].id;
+            document.querySelector('#changeCustomer').value = results[0].Заказчик;
+            document.querySelector('#changeCarrier').value = results[0].Перевозчик;
+            document.querySelector('#changeVolume').value = results[0].Объем;
+            document.querySelector('#changeRawMaterial').value = results[0].Сырье;
+            document.querySelector('#changeEtc').value = results[0]['и тд.'];
+        }
+    }
+    xhttp.open('POST','/orderData',true);
+    xhttp.setRequestHeader("Content-Type","application/json")
+    xhttp.send(`{"changeOrder": ${orderId} }`)
 }

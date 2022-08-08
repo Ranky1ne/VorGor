@@ -16,6 +16,8 @@ body {
 /* Main content */
 
 table {
+  margin-left: 15px;
+  min-height: 630px;
   width: 300px;
   display: inline-block;
   border: none;

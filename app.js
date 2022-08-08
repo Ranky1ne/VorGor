@@ -22,7 +22,6 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '/static')));
 app.use(express.static(path.join(__dirname, '/')));
 app.use(morgan('dev'))
 app.set('port', process.env.PORT || 4300);
@@ -72,37 +71,39 @@ app.post('/newForm', async function (request, response) {
 	volume = body.volume;
 	rawMaterial = body.rawMaterial;
 	etc = body.etc;
-	console.log(request.body)
 	let dott;
-	connection.query(
-		'INSERT INTO `nodelogin`.`newForm` ( `Заказчик`, `Перевозчик`, `Объем`, `Сырье`, `и тд.`) VALUES (?, ?, ?, ?, ?); ',
-		[customer, carrier, volume, rawMaterial, etc],
-		function (error, results) {
-			if (error) throw error;
-			dott = results.insertId;
-			console.log(dott);
-			connection.query(
-				'INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`) VALUES (?, ?, ?)',
-				[customer, carrier, dott],
-				function (error, results) {
-					if (error) throw error;
+	const query = (connection, queryFst, argsFst, queryScd, argsScd) => {
+		return new Promise((resolve, reject) => {
+		  connection.query(queryFst, argsFst, (err, res) => {
+			if (err) reject  (err);
+			resolve(res);
+			if(err.length > 0){
+				dott = res.insertId;
+			}
+			connection.query(queryScd, argsScd, (err, res) => {
+				if (err) reject  (err);
+				resolve(res);
+			  });
+		  });
+		});
+	  };
 
-				})
-		})
+	  try {
+		await query(
+		  connection,
+		  "INSERT INTO `nodelogin`.`newForm` ( `Заказчик`, `Перевозчик`, `Объем`, `Сырье`, `и тд.`) VALUES (?, ?, ?, ?, ?); ",
+		  [customer, carrier, volume, rawMaterial, etc],
+		  "INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`) VALUES (?, ?, ?)",
+		  [customer, carrier, dott]
+		);
+	  } catch (error) {
+	 console.log(error)
+	  }
 
 	response.redirect('/home');
 })
 
-app.post('/changeForm', async function (request, response) {
-	response.sendFile(path.join(__dirname + '/Index/changeForm.html'));
-	const body = request.body;
-	let dott = body.changeOrder;
-	connection.query("SELECT * FROM newForm WHERE id = ?", [dott], async function (err, result, fields) {
-		if (err) throw err;
-		let data = JSON.stringify(result);
-		fs.writeFileSync('./dataChange.json', data);
-	});
-});
+
 
 app.post("/update", async function (request, response) {
   const body = request.body;
@@ -220,9 +221,6 @@ app.post('/moveCarsBack', async function (request, response) {
 	response.end()
 });
 
-
-
-
 app.get('/', function (request, response) {
 	// Render login template	
 	response.sendFile(path.join(__dirname + '/Index/login.html'));
@@ -231,11 +229,6 @@ app.get('/', function (request, response) {
 
 app.get('/home', function (request, response) {
 	if (request.session.loggedin) {
-		connection.query("SELECT * FROM newForm", async function (err, result, fields) {
-			if (err) throw err;
-			let data = JSON.stringify(result);
-			fs.writeFileSync('./data.json', data);
-		});
 		response.sendFile(path.join(__dirname + '/Index/home.html'))
 	} else {
 		// Not logged in
@@ -262,6 +255,17 @@ app.get('/newForm', function (request, response) {
 	}
 });
 
+app.get('/changeForm', async function (request, response) {
+	if (request.session.loggedin) {
+		response.sendFile(path.join(__dirname + '/Index/changeForm.html'));
+	} else {
+		// Not logged in
+		response.redirect('/');
+
+	}
+	
+});
+
 app.get('/carList', function (request, response) {
 	if (request.session.loggedin) {
 		response.statusCode =200;
@@ -282,6 +286,15 @@ app.get('/operator', function (request, response) {
 	}
 })
 
+app.get('/printTTN',function (request,response){
+	if (request.session.loggedin) {
+		response.sendFile(path.join(__dirname + '/Index/printTTN.html'))
+	} else {
+		// Not logged in
+		response.redirect('/');;
+	}
+})
+
 app.get('/carsData',function (request,response){
 	response.statusCode =200;
 	response.setHeader('Content-Type', 'aplication/json')
@@ -291,25 +304,37 @@ app.get('/carsData',function (request,response){
 		response.end(data);
 	})})
 
-	app.get('/carListData', function (request, response) {
-		response.statusCode =200;
-		
-		response.setHeader('Content-Type', 'aplication/json')
-	connection.query("SELECT * FROM cars", async function (err, result, fields) {
+app.get('/carListData', function (request, response) {
+	response.statusCode =200;
+	
+	response.setHeader('Content-Type', 'aplication/json')
+connection.query("SELECT * FROM cars", async function (err, result, fields) {
+	if (err) throw err;
+	let data = JSON.stringify(result);
+	response.end(data);
+});
+})
+
+app.post('/orderData', function(request, response){
+	const body = request.body;
+	let dott = body.changeOrder;
+	console.log(dott)
+	connection.query("SELECT * FROM newForm WHERE id = ?", [dott], async function (err, result, fields) {
 		if (err) throw err;
 		let data = JSON.stringify(result);
 		response.end(data);
 	});
-	})
-
-app.get('/printTTN',function (request,response){
-	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/Index/printTTN.html'))
-	} else {
-		// Not logged in
-		response.redirect('/');;
-	}
 })
+
+app.get('/homeData', function (request,response){
+	connection.query("SELECT * FROM newForm", async function (err, result, fields) {
+		if (err) throw err;
+		let data = JSON.stringify(result);
+		response.end(data);
+	});
+})
+
+
 
 http.createServer(app).listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
