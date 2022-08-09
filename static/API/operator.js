@@ -68,7 +68,8 @@ function loadCarOnObject (){
             document.getElementById('main').innerHTML = '';
             results.forEach(elem =>{
                 if(elem['Объем, м3'] !== null && elem.onObject === 0){
-                    carData.push(elem) 
+                    if (carData.length === 0){carData.push(elem) }
+                    
                     document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCarBack(${elem.id})"></button>`)
                     
                     let block = document.createElement('div');
@@ -100,7 +101,7 @@ function loadCarOnObject (){
 
                     textString1 = document.createTextNode('№: '+ elem['Номер машины']);
                     textVolume = document.createTextNode('Объем, м3: '+ elem['Объем, м3']);
-                    blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id})">Печать</button>`;
+                    blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id},${elem.orderId})">Печать</button>`;
 
                     string1.appendChild(textString1);
                     string2.appendChild(textString2);
@@ -146,14 +147,13 @@ function moveCarBack(carId){
         if(this.readyState == 4 && this.status == 200){
             loadCarOnObject()
         }}
-      
         xhttp.open('POST','/moveCarsBack',true);
         xhttp.setRequestHeader("Content-Type","application/json")
         xhttp.send(`{"carId": ${carId}}`)
       
 }
 
-function printFile (carId) {
+function printFile (carId,orderId) {
     let term = window.open(`/printTTN?carId=${carId}`);
     // let xhttp = new XMLHttpRequest();
     // xhttp.onreadystatechange = function(){  

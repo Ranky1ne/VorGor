@@ -22,7 +22,7 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '/')));
+app.use(express.static(path.join(__dirname, '/static')));
 app.use(morgan('dev'))
 app.set('port', process.env.PORT || 4300);
 
@@ -239,13 +239,13 @@ app.post('/moveCarsBack', async function (request, response) {
 
 app.get('/', function (request, response) {
 	// Render login template	
-	response.sendFile(path.join(__dirname + '/Index/login.html'));
+	response.sendFile(path.join(__dirname + '/static/html/login.html'));
 
 });
 
 app.get('/home', function (request, response) {
 	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/Index/home.html'))
+		response.sendFile(path.join(__dirname + '/static/html/home.html'))
 	} else {
 		// Not logged in
 		response.redirect('/');;
@@ -254,7 +254,7 @@ app.get('/home', function (request, response) {
 
 app.get('/admin', function (request, response) {
 	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/Index/admin.html'));
+		response.sendFile(path.join(__dirname + '/static/html/admin.html'));
 	} else {
 		// Not logged in
 		response.redirect('/');
@@ -263,7 +263,7 @@ app.get('/admin', function (request, response) {
 
 app.get('/newForm', function (request, response) {
 	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/Index/newForm.html'));
+		response.sendFile(path.join(__dirname + '/static/html/newForm.html'));
 	} else {
 		// Not logged in
 		response.redirect('/');
@@ -273,7 +273,7 @@ app.get('/newForm', function (request, response) {
 
 app.get('/changeForm', async function (request, response) {
 	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/Index/changeForm.html'));
+		response.sendFile(path.join(__dirname + '/static/html/changeForm.html'));
 	} else {
 		// Not logged in
 		response.redirect('/');
@@ -285,7 +285,7 @@ app.get('/changeForm', async function (request, response) {
 app.get('/carList', function (request, response) {
 	if (request.session.loggedin) {
 		response.statusCode =200;
-		response.sendFile(path.join(__dirname + '/Index/carList.html'))
+		response.sendFile(path.join(__dirname + '/static/html/carList.html'))
 		
 	} else {
 		// Not logged in
@@ -295,7 +295,7 @@ app.get('/carList', function (request, response) {
 
 app.get('/operator', function (request, response) {
 	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/Index/operator.html'))
+		response.sendFile(path.join(__dirname + '/static/html/operator.html'))
 	} else {
 		// Not logged in
 		response.redirect('/');;
@@ -304,7 +304,7 @@ app.get('/operator', function (request, response) {
 
 app.get('/printTTN',function (request,response){
 	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/Index/printTTN.html'))
+		response.sendFile(path.join(__dirname + '/static/html/printTTN.html'))
 	} else {
 		// Not logged in
 		response.redirect('/');;
