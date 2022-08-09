@@ -40,7 +40,6 @@ app.post('/auth', function (request, response) {
 				// If there is an issue with the query, output the error
 				if (error) throw error;
 				// If the account exists
-				console.log(results);
 				if (results.length > 0) {
 
 					// Authenticate the user
@@ -72,18 +71,17 @@ app.post('/newForm', async function (request, response) {
 	rawMaterial = body.rawMaterial;
 	etc = body.etc;
 	let dott;
-	const query = (connection, queryFst, argsFst, queryScd, argsScd) => {
+	const query = (connection, queryFst, argsFst, queryScd) => {
 		return new Promise((resolve, reject) => {
 		  connection.query(queryFst, argsFst, (err, res) => {
 			if (err) reject  (err);
-			resolve(res);
-			if(err.length > 0){
+			
+			if(err === null){
 				dott = res.insertId;
-			}
-			connection.query(queryScd, argsScd, (err, res) => {
-				if (err) reject  (err);
-				resolve(res);
-			  });
+				connection.query(queryScd, [customer, carrier, dott], (err, res) => {
+					if (err) reject  (err);
+					resolve(res)
+			  });}
 		  });
 		});
 	  };
@@ -93,8 +91,7 @@ app.post('/newForm', async function (request, response) {
 		  connection,
 		  "INSERT INTO `nodelogin`.`newForm` ( `Заказчик`, `Перевозчик`, `Объем`, `Сырье`, `и тд.`) VALUES (?, ?, ?, ?, ?); ",
 		  [customer, carrier, volume, rawMaterial, etc],
-		  "INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`) VALUES (?, ?, ?)",
-		  [customer, carrier, dott]
+		  "INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`) VALUES (?, ?, ?)"
 		);
 	  } catch (error) {
 	 console.log(error)
@@ -113,7 +110,6 @@ app.post("/update", async function (request, response) {
   volume = body.changeVolume;
   rawMaterial = body.changeRawMaterial;
   etc = body.changeEtc;
-  console.log(dott);
   const query = (connection, query, args) => {
     return new Promise((resolve, reject) => {
       connection.query(query, args, (err, res) => {
@@ -173,19 +169,41 @@ app.post('/deleteCar', async function (request, response) {
 
 app.post('/addCar', async function (request, response) {
 	response.statusCode = 200;
-	console.log(request.body)
 	const body = request.body;
 	let carId = body.carId;
-		carNumber = body.carNumber;
-		carVolume = body.carVolume;
-		connection.query("SELECT  `Заказчик`, `Перевозчик` FROM `cars` WHERE `Объем, м3` = 0 AND `orderId` = ?", [carId], async function (err, result, fields) {
-			if (err) throw err;
-			let carCustomer = result[0]['Заказчик'];
-			let carCarier = result[0][`Перевозчик`];
-			connection.query("INSERT INTO cars (`Заказчик`, `Перевозчик`,`Номер машины`, `Объем, м3`, `orderId`) VALUES (?, ?, ?, ?, ?)", [carCustomer,carCarier, carNumber, carVolume, carId], async function (err, result, fields) {
-				if (err) throw err;
-			});			
-		});	
+	let carNumber = body.carNumber;
+	let carVolume = body.carVolume;
+	let carCustomer;
+	let carCarier;
+		const query = (connection, queryFst, argsFst, queryScd) => {
+			return new Promise((resolve, reject) => {
+			  connection.query(queryFst, argsFst, (err, res) => {
+				if (err) reject  (err);
+				if(err === null){
+					carCustomer = res[0]['Заказчик'];
+					carCarier = res[0][`Перевозчик`];
+				
+					connection.query(queryScd, [carCustomer,carCarier, carNumber, carVolume, carId], (err, res) => {
+						if (err) reject  (err);
+						resolve(res);
+				  });
+				}
+			  });
+			});
+		  };
+	
+		  try {
+			await query(
+			  connection,
+			  "SELECT  `Заказчик`, `Перевозчик` FROM `cars` WHERE `Объем, м3` = 0 AND `orderId` = ?",
+			  [carId],
+			  "INSERT INTO cars (`Заказчик`, `Перевозчик`,`Номер машины`, `Объем, м3`, `orderId`) VALUES (?, ?, ?, ?, ?)",
+			  [carCustomer,carCarier, carNumber, carVolume, carId]
+			);
+		  } catch (error) {
+		 console.log(error)
+		  }
+		
 			
 		
 		response.redirect(`/carList?carList=${carId}`)
@@ -193,7 +211,6 @@ app.post('/addCar', async function (request, response) {
 
 app.post('/moveCars', async function (request, response) {
 	response.statusCode = 200;
-	response.setHeader("Content-Type","text/plain")
 	let dott =request.body.carId;
 	connection.query(
 		'UPDATE cars SET `onObject` = 0 WHERE id = ?',
@@ -208,7 +225,6 @@ app.post('/moveCars', async function (request, response) {
 
 app.post('/moveCarsBack', async function (request, response) {
 	response.statusCode = 200;
-	response.setHeader("Content-Type","text/plain")
 	let dott =request.body.carId;
 	connection.query(
 		'UPDATE cars SET `onObject` = 1 WHERE id = ?',
@@ -316,9 +332,9 @@ connection.query("SELECT * FROM cars", async function (err, result, fields) {
 })
 
 app.post('/orderData', function(request, response){
+	response.statusCode =200;
 	const body = request.body;
 	let dott = body.changeOrder;
-	console.log(dott)
 	connection.query("SELECT * FROM newForm WHERE id = ?", [dott], async function (err, result, fields) {
 		if (err) throw err;
 		let data = JSON.stringify(result);
@@ -327,13 +343,18 @@ app.post('/orderData', function(request, response){
 })
 
 app.get('/homeData', function (request,response){
+	response.statusCode =200;
 	connection.query("SELECT * FROM newForm", async function (err, result, fields) {
 		if (err) throw err;
 		let data = JSON.stringify(result);
+		console.log(result);
 		response.end(data);
 	});
 })
 
+// app.post('/volumeChange', function(request,response){
+
+// })
 
 
 http.createServer(app).listen(app.get('port'), function () {

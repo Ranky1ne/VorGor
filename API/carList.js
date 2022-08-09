@@ -26,14 +26,18 @@ function loadCarList (){
             results.forEach(elem => {
                 if(data == elem.orderId){
                     if (elem['Номер машины'] !== null){
-                        document.querySelector(`.list`).insertAdjacentHTML("beforeend", '<tr class="headerTable"><td>Номер машины</td><td>Объем, м³</td></tr>')
+                        let box = document.createElement('div');
+                        box.setAttribute("id",`car-boxList-${elem.id}`)
+                        box.className = 'car-boxList';
+                        document.querySelector(`.list`).appendChild(box)
+                        document.querySelector(`#car-boxList-${elem.id}`).insertAdjacentHTML("beforeend", '<tr class="headerTable"><td>Номер машины</td><td>Объем, м³</td></tr>')
                         let row = document.createElement('tr');
                         row.innerHTML = `<td cosplan="2">${elem['Номер машины']}</td><td cosplan ="2">${elem['Объем, м3']}</td>`
-                        document.querySelector(`.list`).appendChild(row);
+                        document.querySelector(`#car-boxList-${elem.id}`).appendChild(row);
                         row = document.createElement('div');
                         row.className = 'deleteBut';
                         row.innerHTML = ` <form  class="deleteCar" id="deleteBut${elem.id}"  action="/deleteCar" method="post">`
-                        document.querySelector(`.list`).appendChild(row);
+                        document.querySelector(`#car-boxList-${elem.id}`).appendChild(row);
                         document.querySelector(`#deleteBut${elem.id}`).innerHTML = `<input type="hidden" name="carOrderId" id="carOrderId${elem.orderId}" value="${elem.orderId}"><input name="deleteCar" type="hidden" value="${elem.id}"><button class="btn" >Delete</button>`;
                        
                     }

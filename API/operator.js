@@ -29,9 +29,9 @@ function loadCars (){
                     }
                     let indBr2 = elem['Заказчик'].indexOf('ИНН');
                     if (indBr2 === -1){
-                        textString2 = document.createTextNode('Перевозчик: '+ elem['Заказчик']);
+                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик']);
                     } else {
-                        textString2 = document.createTextNode('Перевозчик: '+ elem['Заказчик'].slice(0, (indBr2)));
+                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик'].slice(0, (indBr2)));
                     }
 
                     textString1 = document.createTextNode('№: '+ elem['Номер машины']);
@@ -57,7 +57,7 @@ function loadCars (){
     xhttp.open('GET','/carsData',true);
     xhttp.send()
 }
-
+let carData=[];
 
 function loadCarOnObject (){
     let xhttp = new XMLHttpRequest();
@@ -68,7 +68,7 @@ function loadCarOnObject (){
             document.getElementById('main').innerHTML = '';
             results.forEach(elem =>{
                 if(elem['Объем, м3'] !== null && elem.onObject === 0){
-                    console.log(elem.onObject)   
+                    carData.push(elem) 
                     document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCarBack(${elem.id})"></button>`)
                     
                     let block = document.createElement('div');
@@ -93,14 +93,14 @@ function loadCarOnObject (){
                     }
                     let indBr2 = elem['Заказчик'].indexOf('ИНН');
                     if (indBr2 === -1){
-                        textString2 = document.createTextNode('Перевозчик: '+ elem['Заказчик']);
+                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик']);
                     } else {
-                        textString2 = document.createTextNode('Перевозчик: '+ elem['Заказчик'].slice(0, (indBr2)));
+                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик'].slice(0, (indBr2)));
                     }
 
                     textString1 = document.createTextNode('№: '+ elem['Номер машины']);
                     textVolume = document.createTextNode('Объем, м3: '+ elem['Объем, м3']);
-                    blockButt.innerHTML = `<button onclick="printFile(${elem.id})">Печать</button>`;
+                    blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id})">Печать</button>`;
 
                     string1.appendChild(textString1);
                     string2.appendChild(textString2);
@@ -155,5 +155,17 @@ function moveCarBack(carId){
 
 function printFile (carId) {
     let term = window.open(`/printTTN?carId=${carId}`);
+    // let xhttp = new XMLHttpRequest();
+    // xhttp.onreadystatechange = function(){  
+    //     if(this.readyState == 4 && this.status == 200){
+    //         let result = this.responseText;
+    //         let results = JSON.parse(result);
+    //         results.forEach(elem => {
+    //             if (carId)
+    //         })
+
+    //     }}
+    // xhttp.open('GET','/homeData',true);
+    // xhttp.send()
 }
 

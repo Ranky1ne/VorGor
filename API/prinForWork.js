@@ -29,13 +29,13 @@ function ttn(){
                 let carId = $_GET(['carId'])
                 let result = this.responseText;
                 let results = JSON.parse(result);
-               
+                let carData = [];
                 results.forEach(elem => {
                     
                     if(carId == elem.id){
                         for(let key in elem){
-                            let carData = [];
-                         carData.push(elem[key]) ;
+                           
+                            carData.push(elem[key]) ;
                         
                             
                         }
@@ -54,7 +54,7 @@ function ttn(){
             
 }
 
-// window.onafterprint = ()=>{
-//     window.close()
-//    }
+window.onafterprint = ()=>{
+    window.close()
+   }
 
