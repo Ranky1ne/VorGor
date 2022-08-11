@@ -14,9 +14,9 @@ function data(){
                 document.querySelector('[class~="javaScrip"]:last-of-type ').appendChild(wor);
                 document.querySelector(`#tableCss${elem.id}`).insertAdjacentHTML('beforeend', `<form  class="changeOrder"  id="changeOrder${elem.id}" action="/changeForm" method="get">`) 
                 document.querySelector(`#tableCss${elem.id}`).insertAdjacentHTML('beforeend', ` <form  class="carList"  id="carList${elem.id}" action="/carList" method="get">`)
-                document.querySelector(`#deleteOrder${elem.id}`).innerHTML = `<input name="deleteOrder" type="hidden" value="${elem.id}"><button class="btn"  ondblclick="submit">Delete</button>`;
-                document.querySelector(`#changeOrder${elem.id}`).innerHTML = `<input name="changeOrder" type="hidden" value="${elem.id}"><input class="btn" type="submit" value="Change">`;
-                document.querySelector(`#carList${elem.id}`).innerHTML = `<input name="carList" type="hidden" value="${elem.id}"><input class="btn" type="submit" value="Car">`;
+                document.querySelector(`#deleteOrder${elem.id}`).innerHTML = `<input name="deleteOrder" type="hidden" value="${elem.id}"><button class="btn"  ondblclick="submit">Удалить</button>`;
+                document.querySelector(`#changeOrder${elem.id}`).innerHTML = `<input name="changeOrder" type="hidden" value="${elem.id}"><input class="btn" type="submit" value="Изменить">`;
+                document.querySelector(`#carList${elem.id}`).innerHTML = `<input name="carList" type="hidden" value="${elem.id}"><input class="btn" type="submit" value="Машины">`;
                 let orderData = document.createElement('div')
                     orderData.setAttribute("id", `orderData${elem.id}`);
                     document.querySelector(`.orderPage${elem.id}`).appendChild(orderData);
