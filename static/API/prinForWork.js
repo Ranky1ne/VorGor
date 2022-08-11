@@ -47,7 +47,7 @@ function ttn(){
                 })
             }}
         
-            xhttp.open('GET','/carListData',true);
+            xhttp.open('GET','/carData',true);
             xhttp.send()
         
 
