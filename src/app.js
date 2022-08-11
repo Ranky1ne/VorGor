@@ -16,11 +16,9 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import { connection } from './repository/connection.js'
 import { router } from './router.js'
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { __dirname } from "../dirname.js"; 
 
-const __filename = fileURLToPath('file:///home/alex/Desktop/VorGor/static/');
-const __dirname = dirname(__filename);
+
 
 const app = express()
 app.use(
@@ -41,87 +39,15 @@ app.set('port', process.env.PORT || 4300)
 app.use('/', router)
 //В него я перенес логику некоторых роутов, сделай с остальными по подобию
 
-// app.post('/moveCars', async function (request, response) {
-//   response.statusCode = 200
-//   let dott = request.body.carId
-//   connection.query(
-//     'UPDATE cars SET `onObject` = 0 WHERE id = ?',
-//     [dott],
-//     function (error, results) {
-//       if (error) throw error
-//     }
-//   )
-//   response.end()
+
+// app.get('/operator', function (request, response) {
+//   if (request.session.loggedin) {
+//     response.sendFile(path.join(__dirname + '/static/html/operator.html'))
+//   } else {
+//     // Not logged in
+//     response.redirect('/')
+//   }
 // })
-
-app.post('/moveCarsBack', async function (request, response) {
-  response.statusCode = 200
-  let dott = request.body.carId
-  connection.query(
-    'UPDATE cars SET `onObject` = 1 WHERE id = ?',
-    [dott],
-    function (error, results) {
-      if (error) throw error
-    }
-  )
-  response.end()
-})
-
-
-app.get('/home', function (request, response) {
-  if (request.session.loggedin) {
-    response.sendFile(path.join(__dirname + '/static/html/home.html'))
-  } else {
-    // Not logged in
-    response.redirect('/')
-  }
-})
-
-app.get('/admin', function (request, response) {
-  if (request.session.loggedin) {
-    response.sendFile(path.join(__dirname + '/static/html/admin.html'))
-  } else {
-    // Not logged in
-    response.redirect('/')
-  }
-})
-
-app.get('/newForm', function (request, response) {
-  if (request.session.loggedin) {
-    response.sendFile(path.join(__dirname + '/static/html/newForm.html'))
-  } else {
-    // Not logged in
-    response.redirect('/')
-  }
-})
-
-app.get('/changeForm', async function (request, response) {
-  if (request.session.loggedin) {
-    response.sendFile(path.join(__dirname + '/static/html/changeForm.html'))
-  } else {
-    // Not logged in
-    response.redirect('/')
-  }
-})
-
-app.get('/carList', function (request, response) {
-  if (request.session.loggedin) {
-    response.statusCode = 200
-    response.sendFile(path.join(__dirname + '/static/html/carList.html'))
-  } else {
-    // Not logged in
-    response.redirect('/')
-  }
-})
-
-app.get('/operator', function (request, response) {
-  if (request.session.loggedin) {
-    response.sendFile(path.join(__dirname + '/static/html/operator.html'))
-  } else {
-    // Not logged in
-    response.redirect('/')
-  }
-})
 
 app.get('/printTTN', function (request, response) {
   if (request.session.loggedin) {
@@ -178,9 +104,6 @@ app.get('/homeData', function (request, response) {
   })
 })
 
-// app.post('/volumeChange', function(request,response){
-
-// })
 
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'))
