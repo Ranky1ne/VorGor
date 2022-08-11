@@ -1,26 +1,23 @@
+import { query } from "../repository/query.js";
+import { connection } from "../repository/connection.js";
+
 export const update = async (request, response) => {
+  const {changerId, changeCustomer, changeCarrier, changeVolume, changeRawMaterial, changeEtc} = request.body;
   //Отрефактори по примеру newForm.js
-  const body = request.body;
-  let dott = body.changerId;
-  let customer = body.changeCustomer;
-  carrier = body.changeCarrier;
-  volume = body.changeVolume;
-  rawMaterial = body.changeRawMaterial;
-  etc = body.changeEtc;
-  const query = (connection, query, args) => {
-    return new Promise((resolve, reject) => {
-      connection.query(query, args, (err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
-    });
-  };
+  // const body = request.body;
+  // let dott = body.changerId;
+  // let customer = body.changeCustomer;
+  // carrier = body.changeCarrier;
+  // volume = body.changeVolume;
+  // rawMaterial = body.changeRawMaterial;
+  // etc = body.changeEtc;
+  
 
   try {
     await query(
       connection,
       "UPDATE newForm SET `Заказчик` = ?, `Перевозчик` = ?, `Объем` = ?, `Сырье` = ?, `и тд.` = ? WHERE id = ?",
-      [customer, carrier, volume, rawMaterial, etc, dott]
+      [changeCustomer, changeCarrier, changeVolume, changeRawMaterial, changeEtc, changerId]
     );
   } catch (error) {
     console.log(error);

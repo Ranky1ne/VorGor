@@ -17,7 +17,7 @@
 
 	
 <body onload="loadCars()">
-	<input class="search" type="search" id="site-search" name="q" placeholder="Поиск машин">
+	<input class="search" type="search" id="site-search" oninput="searchCars()" placeholder="Поиск машин">
 	<nav>
 		<button class="btn" id="btn-f" onclick="loadCars()">Перевоз</button>
 		<button class="btn" id="btn-s" onclick="loadCarOnObject()">На обьекте</button>

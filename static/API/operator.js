@@ -1,15 +1,15 @@
-function loadCars (){
+let descSwich = 1;
+function loadCars (regex){
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){
         if(this.readyState == 4 && this.status == 200){
             let result = this.responseText;
             let results = JSON.parse(result);
             document.getElementById('main').innerHTML = '';
-            results.forEach(elem =>{
-                if(elem['Номер машины'] !== null && elem.onObject === 1){
+            function createTable(elem){
                 document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCar(${elem.id})"></button>`)
                 
-                let block = document.createElement('div');
+                    let block = document.createElement('div');
                     let string1 = document.createElement('h1');
                     let string2 = document.createElement('h6');
                     let string3 = document.createElement('h6');
@@ -48,7 +48,21 @@ function loadCars (){
                     block.appendChild(volume)
              
                 document.getElementById(`car${elem.id}`).appendChild(block);
+            }
 
+
+            results.forEach(elem =>{
+                if(elem['Номер машины'] !== null && elem.onObject === 1){
+                    let data = document.getElementById('site-search').value;
+                    data = data.toUpperCase();
+                    data.replace(/\s/g,'');
+                    regex = new RegExp(`${data}`, 'g');
+                        if (elem['Номер машины'].replace(/\s/g,'').match(regex)){
+                            createTable(elem)
+                        } 
+                     else if (data === ''){
+                        createTable(elem)
+                    }
                 }
             })
 
@@ -56,21 +70,19 @@ function loadCars (){
     }
     xhttp.open('GET','/carsData',true);
     xhttp.send()
+    descSwich = 1;
 }
 let carData=[];
 
-function loadCarOnObject (){
+function loadCarOnObject (regex){
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){
         if(this.readyState == 4 && this.status == 200){
             let result = this.responseText;
             let results = JSON.parse(result);
             document.getElementById('main').innerHTML = '';
-            results.forEach(elem =>{
-                if(elem['Объем, м3'] !== null && elem.onObject === 0){
-                    if (carData.length === 0){carData.push(elem) }
-                    
-                    document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCarBack(${elem.id})"></button>`)
+            function createTable(elem){
+                document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCarBack(${elem.id})"></button>`)
                     
                     let block = document.createElement('div');
                     let string1 = document.createElement('h1');
@@ -114,9 +126,23 @@ function loadCarOnObject (){
                     block.appendChild(string3);
                     block.appendChild(volume)
                     block.appendChild(blockButt)
+
+
                     
-                    document.getElementById(`car${elem.id}`).appendChild(block);
-                    
+                    document.getElementById(`car${elem.id}`).appendChild(block)
+            }
+            results.forEach(elem =>{
+                if(elem['Номер машины'] !== null && elem.onObject === 0){
+                    let data = document.getElementById('site-search').value;
+                    data = data.toUpperCase();
+                    data.replace(/\s/g,'');
+                    regex = new RegExp(`${data}`, 'g')   
+                        if (elem['Номер машины'].replace(/\s/g,'').match(regex)){
+                            createTable(elem)
+                        } 
+                     else if (data === ''){
+                        createTable(elem)
+                    }
                 }
             })
 
@@ -124,6 +150,7 @@ function loadCarOnObject (){
     }
     xhttp.open('GET','/carsData',true);
     xhttp.send()
+    descSwich = 0;
 }
 
 function moveCar(carId){
@@ -143,7 +170,6 @@ function moveCar(carId){
 function moveCarBack(carId){
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(){
-        
         if(this.readyState == 4 && this.status == 200){
             loadCarOnObject()
         }}
@@ -169,3 +195,25 @@ function printFile (carId,orderId) {
     // xhttp.send()
 }
 
+
+  
+
+
+function searchCars(){
+    let data = document.getElementById('site-search').value;
+    data = data.toUpperCase();
+    data.replace(/\s/g,'');
+    const regex = new RegExp(`${data}`, 'g')
+    
+    
+    
+    if(data !== '' && descSwich === 0){
+    loadCarOnObject (regex)
+    } else if(data !== '' && descSwich === 1){  
+        loadCars(regex)
+    } else if(data === '' && descSwich === 0){
+        loadCarOnObject ('')
+    }  else if(data === '' && descSwich === 1){
+        loadCars ('')
+    }
+}

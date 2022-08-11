@@ -10,11 +10,6 @@ function $_GET(arr) {
 }
 
 
-//По фронту у меня уже нет сил смотреть. 
-//Убери всякие console.log
-//Чтобы упростить себе жизнь, попробуй использовать axios или fetch вместо XMLHttpRequest.
-//Там все намного проще.
-
 
 
 function loadCarList (){
@@ -55,12 +50,18 @@ function loadCarList (){
 };
 
 function addCar(){
+    let carNumber = document.getElementById('carNumber').value;
+    if(carNumber.match(/[A-zА-я]{1}\s[0-9]{3}\s[A-zА-я]{2}\s[0-9]{2}/)){
     let xhttp = new XMLHttpRequest();
     let carId = $_GET(['carList'])
-    let carNumber = document.getElementById('carNumber').value;
+    
     let carVolume = document.getElementById('carVolume').value;
+    carNumber= carNumber.toUpperCase();
+   
+    
+   
     xhttp.onreadystatechange = function(){
-        console.log(document.getElementById('carNumber').value)
+       
         if(this.readyState == 4 && this.status == 200){
             document.getElementById('tableList').innerHTML = "";
            
@@ -71,4 +72,7 @@ function addCar(){
     xhttp.open('POST','/addCar',true);
     xhttp.setRequestHeader("Content-Type","application/json")
     xhttp.send(`{"carId": ${carId},"carNumber": "${carNumber}", "carVolume": ${carVolume}}`)
+} else {
+    alert('Номер машины должен быть "x 000 xx 00"')
+}
 }

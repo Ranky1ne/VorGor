@@ -1,23 +1,26 @@
 // В package.json я сменил type на module для правильного импорта
 // Чуть ниже нарисовал тебе импорт здорового человека
 // Про require давай забудем пока
-const http = require('http')
-// import http from "http";
+// const http = require('http')
+import http from "http";
 
 
 // По поводу линтинга, добавил тебе свой обычный конфиг в .prettierrc
 // Посмотри как в вскоде работает https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 // Желательно еще себе добавить eslint. Посмотри роличек какой-нибудь в ютубе потом про него.
 
+import express from "express";
+import session from "express-session";
+import path from "path";
+import bodyParser from "body-parser";
+import morgan from "morgan";
+import { connection } from './repository/connection.js'
+import { router } from './router.js'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const express = require('express')
-const session = require('express-session')
-const path = require('path')
-const bodyParser = require('body-parser')
-const morgan = require('morgan')
-
-import { connection } from './repository/connection'
-import { router } from './router'
+const __filename = fileURLToPath('file:///home/alex/Desktop/VorGor/static/');
+const __dirname = dirname(__filename);
 
 const app = express()
 app.use(
@@ -30,7 +33,7 @@ app.use(
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, '/static')))
+app.use(express.static(path.join(__dirname, '/static')));
 app.use(morgan('dev'))
 app.set('port', process.env.PORT || 4300)
 
@@ -38,102 +41,18 @@ app.set('port', process.env.PORT || 4300)
 app.use('/', router)
 //В него я перенес логику некоторых роутов, сделай с остальными по подобию
 
-app.post('/delete', async function (request, response) {
-  let dott = request.body.deleteOrder
-
-  connection.query(
-    'DELETE FROM `cars` WHERE `cars`.`orderId` = ?',
-    [dott],
-    async function (err, result, fields) {
-      if (err) throw err
-    }
-  )
-  connection.query(
-    ' DELETE FROM newForm WHERE `newForm`.`id` = ?',
-    [dott],
-    async function (err, result, fields) {
-      if (err) throw err
-    }
-  )
-
-  response.redirect('/home')
-})
-
-app.post('/deleteCar', async function (request, response) {
-  const body = request.body
-  let dott = body.deleteCar
-  let carId = body.carOrderId
-
-  connection.query(
-    'DELETE FROM cars WHERE `id` = ? ',
-    [dott],
-    async function (err, result, fields) {
-      if (err) throw err
-    }
-  )
-  if (carId === 'undefined') {
-    response.redirect('/home')
-  } else {
-    response.redirect(`/carList?carList=${carId}`)
-  }
-})
-
-app.post('/addCar', async function (request, response) {
-  response.statusCode = 200
-  const body = request.body
-  let carId = body.carId
-  let carNumber = body.carNumber
-  let carVolume = body.carVolume
-  let carCustomer
-  let carCarier
-  const query = (connection, queryFst, argsFst, queryScd) => {
-    return new Promise((resolve, reject) => {
-      connection.query(queryFst, argsFst, (err, res) => {
-        if (err) reject(err)
-        if (err === null) {
-          carCustomer = res[0]['Заказчик']
-          carCarier = res[0][`Перевозчик`]
-
-          connection.query(
-            queryScd,
-            [carCustomer, carCarier, carNumber, carVolume, carId],
-            (err, res) => {
-              if (err) reject(err)
-              resolve(res)
-            }
-          )
-        }
-      })
-    })
-  }
-
-  try {
-    await query(
-      connection,
-      'SELECT  `Заказчик`, `Перевозчик` FROM `cars` WHERE `Объем, м3` = 0 AND `orderId` = ?',
-      [carId],
-      'INSERT INTO cars (`Заказчик`, `Перевозчик`,`Номер машины`, `Объем, м3`, `orderId`) VALUES (?, ?, ?, ?, ?)',
-      [carCustomer, carCarier, carNumber, carVolume, carId]
-    )
-  } catch (error) {
-    console.log(error)
-  }
-
-  response.redirect(`/carList?carList=${carId}`)
-})
-
-app.post('/moveCars', async function (request, response) {
-  response.statusCode = 200
-  let dott = request.body.carId
-  connection.query(
-    'UPDATE cars SET `onObject` = 0 WHERE id = ?',
-    [dott],
-    function (error, results) {
-      if (error) throw error
-    }
-  )
-  response.end()
-})
+// app.post('/moveCars', async function (request, response) {
+//   response.statusCode = 200
+//   let dott = request.body.carId
+//   connection.query(
+//     'UPDATE cars SET `onObject` = 0 WHERE id = ?',
+//     [dott],
+//     function (error, results) {
+//       if (error) throw error
+//     }
+//   )
+//   response.end()
+// })
 
 app.post('/moveCarsBack', async function (request, response) {
   response.statusCode = 200
@@ -148,10 +67,6 @@ app.post('/moveCarsBack', async function (request, response) {
   response.end()
 })
 
-app.get('/', function (request, response) {
-  // Render login template
-  response.sendFile(path.join(__dirname + '/static/html/login.html'))
-})
 
 app.get('/home', function (request, response) {
   if (request.session.loggedin) {

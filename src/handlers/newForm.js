@@ -1,3 +1,6 @@
+import { query } from "../repository/query.js";
+import { connection } from "../repository/connection.js";
+
 export const newForm = async (request, response) => {
   // Было
   //   const body = request.body;
@@ -20,32 +23,24 @@ export const newForm = async (request, response) => {
 
   //Нет смысла дублировать функцию query из src/repository/query.js
   //Просто импортируй ее
-  const query = (connection, queryFst, argsFst, queryScd) => {
-    return new Promise((resolve, reject) => {
-      connection.query(queryFst, argsFst, (err, res) => {
-        if (err) reject(err);
 
-        if (err === null) {
-          dott = res.insertId;
-          connection.query(queryScd, [customer, carrier, dott], (err, res) => {
-            if (err) reject(err);
-            resolve(res);
-          });
-        }
-      });
-    });
-  };
 
   try {
-    await query(
+    let dott = await query(
       connection,
       "INSERT INTO `nodelogin`.`newForm` ( `Заказчик`, `Перевозчик`, `Объем`, `Сырье`, `и тд.`) VALUES (?, ?, ?, ?, ?); ",
-      [customer, carrier, volume, rawMaterial, etc],
-      "INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`) VALUES (?, ?, ?)"
+      [customer, carrier, volume, rawMaterial, etc]
     );
-  } catch (error) {
-    console.log(error);
-  }
+  
+    await query(
+      connection,
+      "INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`) VALUES (?, ?, ?)",
+      [customer, carrier, dott]
+    )
+    
+    } catch (error) {
+      console.log(error)
+    }
 
   response.redirect("/home");
 };
