@@ -10,6 +10,11 @@ function $_GET(arr) {
 }
 
 
+//По фронту у меня уже нет сил смотреть. 
+//Убери всякие console.log
+//Чтобы упростить себе жизнь, попробуй использовать axios или fetch вместо XMLHttpRequest.
+//Там все намного проще.
+
 
 
 function loadCarList (){

@@ -1,0 +1,27 @@
+export const auth = (request, response) => {
+  const { username, password } = request.body;
+
+  // Используй функцию query.js из src/repository/query.js
+  // Переделай функцию в асинхронную
+  if (username && password) {
+    connection.query(
+      "SELECT * FROM accounts WHERE username = ? AND password = ?",
+      [username, password],
+      function (error, results, fields) {
+        if (error) throw error;
+        if (results.length > 0) {
+          request.session.loggedin = true;
+          request.session.username = username;
+          response.redirect("/home");
+        } else {
+          response.redirect("/");
+        }
+        response.end();
+      }
+    );
+  } else {
+    response.send("Please enter Username and Password!");
+    // Думаю что response.end() не нужен
+    response.end();
+  }
+};
