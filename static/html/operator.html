@@ -3,9 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Оператор</title>
-        <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png">
+		<link rel="icon" href="../favicon/favicon-32x32.png" type="image/png">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-        <script src="/API/operator.js"></script>
 		<!-- Google fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,8 +17,8 @@
 	
 <body onload="loadCars()">
 	<input class="search" type="search" id="site-search" oninput="searchCars()" placeholder="Поиск машин">
-	<nav>
-		<button class="btn" id="btn-f" onclick="loadCars()">Перевоз</button>
+	<nav class="nav">
+		<button class="btn active" id="btn-f" onclick="loadCars()">Перевоз</button>
 		<button class="btn" id="btn-s" onclick="loadCarOnObject()">На обьекте</button>
 	</nav>
 	<br>
@@ -48,5 +47,6 @@
 	
 	<script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/API/operator.js"></script>
 	<script src="/API/home.js"></script>
 </body>

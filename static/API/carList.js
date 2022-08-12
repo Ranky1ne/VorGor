@@ -38,7 +38,7 @@ function loadCarList (){
                         row.className = 'deleteBut';
                         row.innerHTML = ` <form  class="deleteCar" id="deleteBut${elem.id}"  action="/deleteCar" method="post">`
                         document.querySelector(`#car-boxList-${elem.id}`).appendChild(row);
-                        document.querySelector(`#deleteBut${elem.id}`).innerHTML = `<input type="hidden" name="carOrderId" id="carOrderId${elem.orderId}" value="${elem.orderId}"><input name="deleteCar" type="hidden" value="${elem.id}"><button class="btn" >Delete</button>`;
+                        document.querySelector(`#deleteBut${elem.id}`).innerHTML = `<input type="hidden" name="carOrderId" id="carOrderId${elem.orderId}" value="${elem.orderId}"><input name="deleteCar" type="hidden" value="${elem.id}"><button class="btn" >Удалить</button>`;
                        
                     }
                 }

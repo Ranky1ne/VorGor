@@ -9,14 +9,8 @@
 
 /* Main content */
 
+
 table {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 15px;
-  min-height: 530px;
-  min-width: 400px;
-  width: 300px;
  
   border: none;
   background-color: #ffffff;
@@ -26,6 +20,29 @@ table {
   border-radius: 5px;
   padding: 15px;
  
+}
+
+.btn {
+  width: 90px;
+  margin: 0 15px;
+}
+
+/* Обертка с клавишами */
+
+table div:first-child {
+  margin-bottom: 13px;
+}
+
+/* Обертка с контентом */
+
+table div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-left: 15px;
+  min-height: 530px;
+  min-width: 400px;
+  width: 300px;
 }
 
 .tableCss {
@@ -47,10 +64,9 @@ td {
 .container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: row;
+  
 }
+
 td:first-child {
     color: rgb(224, 55, 13);;
 }

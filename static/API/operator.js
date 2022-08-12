@@ -169,6 +169,7 @@ function searchCars(){
     }
 }
 
+
 async function printFile (carId,orderId) {
     const allCarsData = await getData();
    const carData = allCarsData.forEach(elem =>{
@@ -189,3 +190,12 @@ async function printFile (carId,orderId) {
      xhttp.setRequestHeader("Content-Type","application/json")
     xhttp.send(`{"orderId": ${orderId}}`);
 }
+
+
+$('.btn').on('click',function(){
+    let currTab = $(this).index();
+
+    $('.btn').removeClass('active');
+    $(this).addClass('active');
+
+})
