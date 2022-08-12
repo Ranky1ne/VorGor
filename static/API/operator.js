@@ -217,3 +217,13 @@ function searchCars(){
         loadCars ('')
     }
 }
+
+// TABS
+
+$('.btn').on('click',function(){
+    let currTab = $(this).index();
+
+    $('.btn').removeClass('active');
+    $(this).addClass('active');
+
+})

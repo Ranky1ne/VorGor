@@ -1,5 +1,9 @@
 /* Button */
 
+nav {
+	margin-top: 10px;
+}
+
 .btn {
   padding: 8px;
 }
@@ -25,19 +29,15 @@
 /* Cards */
 
 .main-car-button {
-	display:flex ;
+  display: flex;
   margin: 0 10px 10px 0;	
-  min-width: 216px;
-  min-height: 206px;
-  max-width: 216px;
-  max-height: 206px;
+  min-width: 250px;
+  min-height: 250px;
+  max-width: 270px;
+  max-height: 270px;
   border-width: 0px;
   transition: 00.4s;
   justify-content: center;
-}
-
-.main-car-button:hover {
-	background-color: #A5B8C6;
 }
 
 .main-car-button::after {
@@ -58,16 +58,17 @@
 }
 
 .print-btn {
-	margin: 5px 0px;
+	margin-top: 10px;
 	width: 50%;
 	height: 30px;
 	border-radius: 10px;
-	transition: 0.75s;
+	transition: 0.4s;
 }
 
 .print-btn:hover {
-	margin-top: 0px;
-	height: 40px;
+	/* Если убра тькомменты кнопка будет делать как и до этого не двигая контент */
+	/* margin-top: 0px; */
+	/* height: 40px; */
 	color: rgb(255, 255, 255);
 	background-color: rgb(54, 54, 54);
 	border:none;
@@ -76,7 +77,6 @@
 h2 {
 	margin: 3px;
 	margin-top: 6px;
-	
 }
 
 h6 {
@@ -88,11 +88,7 @@ h6 {
 	width: auto;
 }
 .car-card {
-	
-  min-width: 216px;
-  min-height: 206px;
-  max-width: 216px;
-  max-height: 206px;
-  border-width: 0px;
-  transition: 00.4s;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
