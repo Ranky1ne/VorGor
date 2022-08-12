@@ -12,7 +12,7 @@ export const newForm = async (request, response) => {
   //   let dott;
 
   // Cтало
-  const { customer, carrier, volume, rawMaterial, etc } = request.body;
+  const { customer, carrier, volume, printId, rawMaterial, adress } = request.body;
 
   // По поводу let dott;
   // Если не собираешься переназначать переменную таким образом:
@@ -28,8 +28,8 @@ export const newForm = async (request, response) => {
   try {
     let dott = await query(
       connection,
-      "INSERT INTO `nodelogin`.`newForm` ( `Заказчик`, `Перевозчик`, `Объем`, `Сырье`, `и тд.`) VALUES (?, ?, ?, ?, ?); ",
-      [customer, carrier, volume, rawMaterial, etc]
+      "INSERT INTO `nodelogin`.`newForm` ( `Заказчик`, `Перевозчик`, `Объем`, `Сырье`, `Адрес`, `printId`) VALUES (?, ?, ?, ?, ?, ?); ",
+      [customer, carrier, volume, rawMaterial, adress, printId]
     );
   
     await query(

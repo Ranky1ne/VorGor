@@ -23,7 +23,7 @@ function changeOrder(){
             document.querySelector('#changeCarrier').value = results[0].Перевозчик;
             document.querySelector('#changeVolume').value = results[0].Объем;
             document.querySelector('#changeRawMaterial').value = results[0].Сырье;
-            document.querySelector('#changeEtc').value = results[0]['и тд.'];
+            document.querySelector('#changeAdress').value = results[0]['Адрес'];
         }
     }
     xhttp.open('POST','/orderData',true);

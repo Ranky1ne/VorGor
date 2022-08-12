@@ -6,6 +6,7 @@ function data(){
             let result = this.responseText;
             let results = JSON.parse(result);
             results.forEach(elem => {
+                if(elem.id !== 531){
                 document.querySelector('.container').appendChild(document.createElement('div')).className = 'javaScrip';
                 let wor = document.createElement('table');
                 wor.className= `orderPage${elem.id}`;
@@ -21,11 +22,22 @@ function data(){
                     orderData.setAttribute("id", `orderData${elem.id}`);
                     document.querySelector(`.orderPage${elem.id}`).appendChild(orderData);
                 for( let key in elem){
+                    if(key !== 'id' && key !== 'printId'  && key !== 'НомерТТН' && elem.id !== 531){
                     let row = document.createElement('tr');
                     row.innerHTML = `<td cosplan="2">${key}</td><td cosplan ="2">${elem[key]}</td>`
                     document.querySelector(`#orderData${elem.id}`).appendChild(row);
+                    } else if(key === 'printId'){
+                        if (elem[key] === 'delivery' ){
+                            let row = document.createElement('tr');
+                        row.innerHTML = `<td cosplan="2">Тип печати</td><td cosplan ="2">Доставка</td>`
+                    document.querySelector(`#orderData${elem.id}`).appendChild(row);
+                        } else if(elem[key] === 'pickup' ){ 
+                            let row = document.createElement('tr');
+                        row.innerHTML = `<td cosplan="2">Тип печати</td><td cosplan ="2">Самовывоз</td>`
+                        document.querySelector(`#orderData${elem.id}`).appendChild(row);}
+                    }
                 }   
-            })
+        }})
         }
     }
     xhttp.open('GET','/homeData',true);

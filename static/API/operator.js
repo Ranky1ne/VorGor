@@ -1,155 +1,126 @@
 let descSwich = 1;
-function loadCars (regex){
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-        if(this.readyState == 4 && this.status == 200){
-            let result = this.responseText;
-            let results = JSON.parse(result);
-            document.getElementById('main').innerHTML = '';
-            function createTable(elem){
-                document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCar(${elem.id})"></button>`)
-                
-                    let block = document.createElement('div');
-                    let string1 = document.createElement('h1');
-                    let string2 = document.createElement('h6');
-                    let string3 = document.createElement('h6');
-                    let volume = document.createElement('h2');
 
-                    block.className ='car-card';
-                    string1.className = 'card-title';
-                    string2.className = 'card-subtitle';
-                    string3.className = 'card-subtitle-2'
-                    volume.className = 'card-volume'
+const  getData = async ()=>{
+   
+const query =()=>{
+        return new Promise((resolve, reject) => { 
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status == 200){
+                const result = this.responseText;
+                const results = JSON.parse(result);
+                resolve (results);
+            }}
+        xhttp.open('GET','/carsData',true);
+        xhttp.send()
+        
+       
+        })
+    }
+    const results = await query();
+   return results;
 
-                    let indBr = elem['Перевозчик'].indexOf(',');
-                    if (indBr === -1){
-                        textString3 = document.createTextNode('Перевозчик: '+ elem['Перевозчик']);
-                    } else {
-                        textString3 = document.createTextNode('Перевозчик: '+ elem['Перевозчик'].slice(0, (indBr)));
-                    }
-                    let indBr2 = elem['Заказчик'].indexOf('ИНН');
-                    if (indBr2 === -1){
-                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик']);
-                    } else {
-                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик'].slice(0, (indBr2)));
-                    }
+}
 
-                    textString1 = document.createTextNode('№: '+ elem['Номер машины']);
-                    textVolume = document.createTextNode('Объем, м3: '+ elem['Объем, м3']);
+const CarrierCustomerSlice =(arg)=>{
+    const block=document.createElement('div'),
+        string1=document.createElement('h1'),
+        string2 = document.createElement('h6'),
+        string3 = document.createElement('h6'),
+        volume = document.createElement('h2');
+    
+        block.className ='car-card';
+        string1.className = 'card-title';
+        string2.className = 'card-subtitle';
+        string3.className = 'card-subtitle-2';
+        volume.className = 'card-volume';
+    
+    const indBr = arg['Перевозчик'].indexOf(','),
+    indBr2 = arg['Заказчик'].indexOf('ИНН');
+    if (indBr === -1){
+        textString3 = document.createTextNode('Перевозчик: '+ arg['Перевозчик']);
+    } else {
+        textString3 = document.createTextNode('Перевозчик: '+ arg['Перевозчик'].slice(0, (indBr)));
+    }
 
-                    string1.appendChild(textString1);
-                    string2.appendChild(textString2);
-                    string3.appendChild(textString3);
-                    volume.appendChild(textVolume);
+    if (indBr2 === -1){
+        textString2 = document.createTextNode('Заказчик: '+ arg['Заказчик']);
+    } else {
+        textString2 = document.createTextNode('Заказчик: '+ arg['Заказчик'].slice(0, (indBr2)));
+    }
+    textString1 = document.createTextNode('№: '+ arg['Номер машины']);
+    textVolume = document.createTextNode('Объем, м3: '+ arg['Объем, м3']);
 
-                    block.appendChild(string1);
-                    block.appendChild(string2);
-                    block.appendChild(string3);
-                    block.appendChild(volume)
-             
-                document.getElementById(`car${elem.id}`).appendChild(block);
-            }
+    string1.appendChild(textString1);
+    string2.appendChild(textString2);
+    string3.appendChild(textString3);
+    volume.appendChild(textVolume);
 
+    block.appendChild(string1);
+    block.appendChild(string2);
+    block.appendChild(string3);
+    block.appendChild(volume)
 
-            results.forEach(elem =>{
-                if(elem['Номер машины'] !== null && elem.onObject === 1){
-                    let data = document.getElementById('site-search').value;
-                    data = data.toUpperCase();
-                    data.replace(/\s/g,'');
-                    regex = new RegExp(`${data}`, 'g');
-                        if (elem['Номер машины'].replace(/\s/g,'').match(regex)){
-                            createTable(elem)
-                        } 
-                     else if (data === ''){
-                        createTable(elem)
-                    }
-                }
-            })
+    return block;
+}
 
+async function loadCars (regex){
+    const results = await getData();
+    document.getElementById('main').innerHTML = '';
+
+    function createTable(elem){
+        document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCar(${elem.id})"></button>`)
+        const block = CarrierCustomerSlice(elem);
+        document.getElementById(`car${elem.id}`).appendChild(block);
+    }
+
+    results.forEach(elem =>{
+        if(elem['Номер машины'] !== null && elem.onObject === 1){
+            
+            let data = document.getElementById('site-search').value;
+            data = data.toUpperCase();
+            data.replace(/\s/g,'');
+            regex = new RegExp(`${data}`, 'g');
+            if (elem['Номер машины'].replace(/\s/g,'').match(regex)){
+                createTable(elem)
+            } 
+            else if (data === ''){
+            createTable(elem)
         }
     }
-    xhttp.open('GET','/carsData',true);
-    xhttp.send()
+    })
     descSwich = 1;
 }
-let carData=[];
 
-function loadCarOnObject (regex){
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-        if(this.readyState == 4 && this.status == 200){
-            let result = this.responseText;
-            let results = JSON.parse(result);
-            document.getElementById('main').innerHTML = '';
-            function createTable(elem){
-                document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCarBack(${elem.id})"></button>`)
-                    
-                    let block = document.createElement('div');
-                    let string1 = document.createElement('h1');
-                    let string2 = document.createElement('h6');
-                    let string3 = document.createElement('h6');
-                    let volume = document.createElement('h2');
-                    let blockButt = document.createElement('div');
+async function loadCarOnObject (regex){
+    const results = await getData();
+    document.getElementById('main').innerHTML = '';
+    function createTable(elem){
+        document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCarBack(${elem.id})"></button>`)
+        
+        const blockButt = document.createElement('div');
+        blockButt.className = 'print-butt';
+        blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id},${elem.orderId})">Печать</button>`;
 
-                    block.className ='car-card';
-                    string1.className = 'card-title';
-                    string2.className = 'card-subtitle';
-                    string3.className = 'card-subtitle-2'
-                    volume.className = 'card-volume'
-                    blockButt.className = 'print-butt';
+        const block = CarrierCustomerSlice(elem);
+        block.appendChild(blockButt)
 
-                    let indBr = elem['Перевозчик'].indexOf(',');
-                    if (indBr === -1){
-                        textString3 = document.createTextNode('Перевозчик: '+ elem['Перевозчик']);
-                    } else {
-                        textString3 = document.createTextNode('Перевозчик: '+ elem['Перевозчик'].slice(0, (indBr)));
-                    }
-                    let indBr2 = elem['Заказчик'].indexOf('ИНН');
-                    if (indBr2 === -1){
-                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик']);
-                    } else {
-                        textString2 = document.createTextNode('Заказчик: '+ elem['Заказчик'].slice(0, (indBr2)));
-                    }
-
-                    textString1 = document.createTextNode('№: '+ elem['Номер машины']);
-                    textVolume = document.createTextNode('Объем, м3: '+ elem['Объем, м3']);
-                    blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id},${elem.orderId})">Печать</button>`;
-
-                    string1.appendChild(textString1);
-                    string2.appendChild(textString2);
-                    string3.appendChild(textString3);
-                    volume.appendChild(textVolume);
-                 
-
-                    block.appendChild(string1);
-                    block.appendChild(string2);
-                    block.appendChild(string3);
-                    block.appendChild(volume)
-                    block.appendChild(blockButt)
-
-
-                    
-                    document.getElementById(`car${elem.id}`).appendChild(block)
-            }
-            results.forEach(elem =>{
-                if(elem['Номер машины'] !== null && elem.onObject === 0){
-                    let data = document.getElementById('site-search').value;
-                    data = data.toUpperCase();
-                    data.replace(/\s/g,'');
-                    regex = new RegExp(`${data}`, 'g')   
-                        if (elem['Номер машины'].replace(/\s/g,'').match(regex)){
-                            createTable(elem)
-                        } 
-                     else if (data === ''){
-                        createTable(elem)
-                    }
-                }
-            })
-
-        }
+        document.getElementById(`car${elem.id}`).appendChild(block)
     }
-    xhttp.open('GET','/carsData',true);
-    xhttp.send()
+    results.forEach(elem =>{
+        if(elem['Номер машины'] !== null && elem.onObject === 0){
+            let data = document.getElementById('site-search').value;
+            data = data.toUpperCase();
+            data.replace(/\s/g,'');
+            regex = new RegExp(`${data}`, 'g')   
+                if (elem['Номер машины'].replace(/\s/g,'').match(regex)){
+                    createTable(elem);
+                } 
+                else if (data === ''){
+                createTable(elem);
+            }
+        }
+    })
     descSwich = 0;
 }
 
@@ -179,26 +150,6 @@ function moveCarBack(carId){
       
 }
 
-function printFile (carId,orderId) {
-    let term = window.open(`/printTTN?carId=${carId}`);
-    // let xhttp = new XMLHttpRequest();
-    // xhttp.onreadystatechange = function(){  
-    //     if(this.readyState == 4 && this.status == 200){
-    //         let result = this.responseText;
-    //         let results = JSON.parse(result);
-    //         results.forEach(elem => {
-    //             if (carId)
-    //         })
-
-    //     }}
-    // xhttp.open('GET','/homeData',true);
-    // xhttp.send()
-}
-
-
-  
-
-
 function searchCars(){
     let data = document.getElementById('site-search').value;
     data = data.toUpperCase();
@@ -216,4 +167,25 @@ function searchCars(){
     }  else if(data === '' && descSwich === 1){
         loadCars ('')
     }
+}
+
+async function printFile (carId,orderId) {
+    const allCarsData = await getData();
+   const carData = allCarsData.forEach(elem =>{
+        if (elem.id === carId){
+            return elem;
+        }
+    })
+    console.log(carData)
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){  
+        if(this.readyState == 4 && this.status == 200){
+            const result = this.responseText;
+            const orderData = JSON.parse(result);
+
+            const term = window.open(`/printTTN?carId=${carId}`);
+        }}
+    xhttp.open('POST','/dataPrinting',true);
+     xhttp.setRequestHeader("Content-Type","application/json")
+    xhttp.send(`{"orderId": ${orderId}}`);
 }

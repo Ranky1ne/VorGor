@@ -1,7 +1,3 @@
-// В package.json я сменил type на module для правильного импорта
-// Чуть ниже нарисовал тебе импорт здорового человека
-// Про require давай забудем пока
-// const http = require('http')
 import http from "http";
 
 
@@ -14,7 +10,6 @@ import session from "express-session";
 import path from "path";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-import { connection } from './repository/connection.js'
 import { router } from './router.js'
 import { __dirname } from "../dirname.js"; 
 
@@ -31,13 +26,11 @@ app.use(
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, '/static')));
+app.use(express.static(path.join(__dirname, '/static')))
 app.use(morgan('dev'))
 app.set('port', process.env.PORT || 4300)
-
-//Используем роутер:
 app.use('/', router)
-//В него я перенес логику некоторых роутов, сделай с остальными по подобию
+
 
 
 http.createServer(app).listen(app.get('port'), function () {

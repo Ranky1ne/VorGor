@@ -1,4 +1,4 @@
-function $_GET(arr) {
+export function $_GET(arr) {
     let res = [];
     for (let key in arr) {  
     let p = window.location.search;
