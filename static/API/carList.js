@@ -45,7 +45,7 @@ function loadCarList (){
             })
         }
     }
-    xhttp.open('GET','/carListData',true);
+    xhttp.open('GET','/carsData',true);
     xhttp.send()
 };
 
