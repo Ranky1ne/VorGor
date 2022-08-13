@@ -40,11 +40,15 @@
                 <div class="d-flex">
                   <div>
                     <div class="l-flex">
-                        <div class="left">
+                      <div class="col first-col">
+                        <h3>Марка машины</h3>
+                        <input name="carMark" id="carMark" type="text" required>
+                      </div>
+                        <div class="col second-col">
                           <h3>Номер машины</h3>
-                          <input name="carNumber" id="carNumber" type="text" pattern="[А-Я]\s[0-9]{3}\s[А-Я]{2}" required>
+                          <input name="carNumber" id="carNumber" type="text" required>
                         </div>
-                        <div class="right">
+                        <div class="col third-col">
                           <h3>Объем, м³</h3>
                           <input type="number" min="0"  name="carVolume" id="carVolume" required>
                         </div>

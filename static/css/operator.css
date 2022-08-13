@@ -40,6 +40,13 @@ nav {
   justify-content: center;
 }
 
+.main-car-button:hover{
+	transition: all 0.5s;
+	background-color: #64829b;
+	border-radius: 25px;
+
+}
+
 .main-car-button::after {
 	background-color: #ffffff;
 }

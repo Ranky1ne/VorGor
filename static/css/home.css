@@ -68,7 +68,9 @@ td {
 }
 
 td:first-child {
-    color: rgb(224, 55, 13);;
+    /* color: rgb(224, 55, 13); */
+    /* color: #ABCDEF; */
+    color: #2F7AC1;
 }
 
 tr {

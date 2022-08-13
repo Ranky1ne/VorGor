@@ -1,7 +1,8 @@
 /* Main settings */
 
 body {
-    background-color: #cfd0d7;
+    background: url('..//favicon/background_1.png') center center;
+    background-attachment: fixed;
     padding-top: 10px;
     font-family: 'Ubuntu', sans-serif;
 
@@ -11,6 +12,8 @@ body {
     max-width: 1110px;
     margin: 0 auto;
 }
+
+
 
 /* BTN */
 
@@ -180,7 +183,9 @@ background-color: rgba(255, 255, 255, 0.7);
     width: 90%;
     padding: 18px ;
     font-family: 'Roboto', sans-serif;
-    background-color: rgb(224, 55, 13);
+    /* Изменение */
+    /* background-color: rgb(224, 55, 13); */
+    background-color: #2F7AC1;
     font-size: 18px;
     text-decoration: none;
     text-transform: uppercase;
@@ -194,7 +199,9 @@ background-color: rgba(255, 255, 255, 0.7);
 }
 
 .burger-menu_link:hover {
-    filter: brightness(0.5);
+    /* Изменение */
+    /* filter: brightness(0.5); */
+    background-color: #ABCDEF;
 }
 .burger-menu_overlay {
     display: none;

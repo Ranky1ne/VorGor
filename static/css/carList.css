@@ -3,17 +3,22 @@
     margin: 10px 0;
 }
 
-.left, .right {
+.col {
     display: inline-block;
+}
+
+.second-col {
+    margin: 10px 0;
 }
 
 .d-flex {
     display: flex;
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
 .l-flex {
     display: flex;
+    flex-flow: wrap;
 }
 
 
