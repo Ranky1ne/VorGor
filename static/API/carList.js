@@ -1,4 +1,4 @@
-export function $_GET(arr) {
+ function $_GET(arr) {
     let res = [];
     for (let key in arr) {  
     let p = window.location.search;
@@ -8,9 +8,6 @@ export function $_GET(arr) {
     }
     return res
 }
-
-
-
 
 function loadCarList (){
     let xhttp = new XMLHttpRequest();
@@ -32,7 +29,7 @@ function loadCarList (){
                         document.querySelector(`.list`).appendChild(box)
                         document.querySelector(`#car-boxList-${elem.id}`).insertAdjacentHTML("beforeend", '<tr class="headerTable"><td>Номер машины</td><td>Объем, м³</td></tr>')
                         let row = document.createElement('tr');
-                        row.innerHTML = `<td cosplan="2">${elem['Номер машины']}</td><td cosplan ="2">${elem['Объем, м3']}</td>`
+                        row.innerHTML = `<td cosplan="2">${elem['Марка машины']}</td><td cosplan="2">${elem['Номер машины']}</td><td cosplan ="2">${elem['Объем, м3']}</td>`
                         document.querySelector(`#car-boxList-${elem.id}`).appendChild(row);
                         row = document.createElement('div');
                         row.className = 'deleteBut';
@@ -50,16 +47,12 @@ function loadCarList (){
 };
 
 function addCar(){
-    let carNumber = document.getElementById('carNumber').value;
+    const carNumber = document.getElementById('carNumber').value;
+    const carVolume = document.getElementById('carVolume').value;
+    const carMark = document.getElementById('carMark').value;
     if(carNumber.match(/[A-zА-я]{1}\s[0-9]{3}\s[A-zА-я]{2}\s[0-9]{2}/)){
-    let xhttp = new XMLHttpRequest();
-    let carId = $_GET(['carList'])
-    
-    let carVolume = document.getElementById('carVolume').value;
-    carNumber= carNumber.toUpperCase();
-   
-    
-   
+    const xhttp = new XMLHttpRequest();
+    const carId = $_GET(['carList'])
     xhttp.onreadystatechange = function(){
        
         if(this.readyState == 4 && this.status == 200){
@@ -71,7 +64,7 @@ function addCar(){
     }
     xhttp.open('POST','/addCar',true);
     xhttp.setRequestHeader("Content-Type","application/json")
-    xhttp.send(`{"carId": ${carId},"carNumber": "${carNumber}", "carVolume": ${carVolume}}`)
+    xhttp.send(`{"carId": ${carId},"carNumber": "${carNumber.toUpperCase()}", "carVolume": ${carVolume}, "carMark": "${carMark.toUpperCase()}"}`)
 } else {
     alert('Номер машины должен быть "x 000 xx 00"')
 }

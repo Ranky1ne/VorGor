@@ -19,6 +19,7 @@ import { printTTN } from "./handlers/get/printTTN.js";
 import { carsData } from "./handlers/get/carsData.js";
 import { homeData } from "./handlers/get/homeData.js";
 import { dataPrinting } from "./handlers/dataPrinting.js";
+import { journal } from "./handlers/get/journal.js";
 
 
 export const router = Router();
@@ -42,5 +43,6 @@ router.get ('/printTTN', printTTN);
 router.get ('/carsData', carsData);
 router.get ('/homeData', homeData);
 router.post ('/dataPrinting', dataPrinting);
+router.get ('/journal', journal);
 
 

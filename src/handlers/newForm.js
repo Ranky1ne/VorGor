@@ -34,8 +34,8 @@ export const newForm = async (request, response) => {
   
     await query(
       connection,
-      "INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`) VALUES (?, ?, ?)",
-      [customer, carrier, dott.insertId]
+      "INSERT INTO cars (`Заказчик`, `Перевозчик`, `orderId`,`Сырье`) VALUES (?, ?, ?, ?)",
+      [customer, carrier, dott.insertId ,rawMaterial]
     )
     
     } catch (error) {

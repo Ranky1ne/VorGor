@@ -27,12 +27,14 @@ const CarrierCustomerSlice =(arg)=>{
         string1=document.createElement('h1'),
         string2 = document.createElement('h6'),
         string3 = document.createElement('h6'),
+        string4 = document.createElement('h6'),
         volume = document.createElement('h2');
     
         block.className ='car-card';
         string1.className = 'card-title';
         string2.className = 'card-subtitle';
         string3.className = 'card-subtitle-2';
+        string4.className = 'card-subtitle-3';
         volume.className = 'card-volume';
     
     const indBr = arg['Перевозчик'].indexOf(','),
@@ -49,16 +51,19 @@ const CarrierCustomerSlice =(arg)=>{
         textString2 = document.createTextNode('Заказчик: '+ arg['Заказчик'].slice(0, (indBr2)));
     }
     textString1 = document.createTextNode('№: '+ arg['Номер машины']);
+    textString4 = document.createTextNode('Вид материала: '+ arg['Сырье']);
     textVolume = document.createTextNode('Объем, м3: '+ arg['Объем, м3']);
 
     string1.appendChild(textString1);
     string2.appendChild(textString2);
     string3.appendChild(textString3);
+    string4.appendChild(textString4);
     volume.appendChild(textVolume);
 
     block.appendChild(string1);
     block.appendChild(string2);
     block.appendChild(string3);
+    block.appendChild(string4);
     block.appendChild(volume)
 
     return block;
@@ -100,7 +105,7 @@ async function loadCarOnObject (regex){
         
         const blockButt = document.createElement('div');
         blockButt.className = 'print-butt';
-        blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id},${elem.orderId})">Печать</button>`;
+        blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id},${elem.orderId},${elem['Объем, м3']})">Печать</button>`;
 
         const block = CarrierCustomerSlice(elem);
         block.appendChild(blockButt)
@@ -170,25 +175,9 @@ function searchCars(){
 }
 
 
-async function printFile (carId,orderId) {
+async function printFile (carId,orderId, volume) {
     const allCarsData = await getData();
-   const carData = allCarsData.forEach(elem =>{
-        if (elem.id === carId){
-            return elem;
-        }
-    })
-    console.log(carData)
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){  
-        if(this.readyState == 4 && this.status == 200){
-            const result = this.responseText;
-            const orderData = JSON.parse(result);
-
-            const term = window.open(`/printTTN?carId=${carId}`);
-        }}
-    xhttp.open('POST','/dataPrinting',true);
-     xhttp.setRequestHeader("Content-Type","application/json")
-    xhttp.send(`{"orderId": ${orderId}}`);
+    const term = window.open(`/printTTN?carId=${carId}&orderId=${orderId}&volume=${volume}`);
 }
 
 
