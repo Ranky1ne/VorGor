@@ -5,7 +5,8 @@
 }
 
 body {
-    background-color: #435165;
+    background: url('..//favicon/background_1.png') center center;
+    background-attachment: fixed;
 }
 
 .login {

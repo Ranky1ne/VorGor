@@ -31,7 +31,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, '/static')))
 app.use(morgan('dev'))
-app.set('port', process.env.PORT || 10)
+app.set('port', process.env.PORT || 4300)
 app.use('/', router)
 
 
