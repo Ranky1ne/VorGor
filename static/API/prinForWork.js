@@ -35,7 +35,7 @@ function $_GET(arr) {
     const [carId, orderId, volume ] =  $_GET(['carId','orderId','volume']);
     const carsData =await query('GET','/carsData');
     const orderData = await query('GET','/homeData');
-    const date = now.getHours() + ':00 ' + now.getDate()+ '/' + (now.getMonth()+1)+ '/' + now.getFullYear();
+    const date = now.getHours() + ':'+ now.getMinutes()+' '+ now.getDate()+ '/' + (now.getMonth()+1)+ '/' + now.getFullYear();
     const car = carsData.filter(elem =>{
        if (elem.id == carId){ 
         return elem;

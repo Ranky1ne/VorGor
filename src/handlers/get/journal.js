@@ -8,6 +8,7 @@ export const journal = async (request, response) => {
    const csvWriter = createObjectCsvWriter({
     path: './static/journal.csv',
     header: [
+        {id: 'Номер Заявки', title: 'Номер Заявки'},
         {id: 'Номер ТТН', title: 'Номер ТТН'},
         {id: 'Заказчик', title: 'Заказчик'},
         {id: 'Перевозчик', title: 'Перевозчик'},

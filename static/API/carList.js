@@ -29,49 +29,36 @@ const query =(type,query,arg)=>{
     })
 }
 
-async function loadCarList(){
-const results =  await query('GET','/carsData');
-const th=document.createElement('th');
-const tr=document.createElement('tr');
-const td=document.createElement('th');
-
-}
-function loadCarList (){
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-        document.getElementsByClassName('list').innerHTML = '';
-        if(this.readyState == 4 && this.status == 200){
-            let result = this.responseText;
-            let results = JSON.parse(result);
-            console.log(results)  
-            let data = $_GET(['carList']);   
-            document.querySelector('#carId').value = data;
-            console.log(data)
-            results.forEach(elem => {
-                if(data == elem.orderId){
-                    if (elem['Номер машины'] !== null){
-                        let box = document.createElement('div');
-                        box.setAttribute("id",`car-boxList-${elem.id}`)
-                        box.className = 'car-boxList';
-                        document.querySelector(`.list`).appendChild(box)
-                        document.querySelector(`#car-boxList-${elem.id}`).insertAdjacentHTML("beforeend", '<tr class="headerTable"><td>Номер машины</td><td>Объем, м³</td></tr>')
-                        let row = document.createElement('tr');
-                        row.innerHTML = `<td cosplan="2">${elem['Марка машины']}</td><td cosplan="2">${elem['Номер машины']}</td><td cosplan ="2">${elem['Объем, м3']}</td>`
-                        document.querySelector(`#car-boxList-${elem.id}`).appendChild(row);
-                        row = document.createElement('div');
-                        row.className = 'deleteBut';
-                        row.innerHTML = ` <form  class="deleteCar" id="deleteBut${elem.id}"  action="/deleteCar" method="post">`
-                        document.querySelector(`#car-boxList-${elem.id}`).appendChild(row);
-                        document.querySelector(`#deleteBut${elem.id}`).innerHTML = `<input type="hidden" name="carOrderId" id="carOrderId${elem.orderId}" value="${elem.orderId}"><input name="deleteCar" type="hidden" value="${elem.id}"><button class="btn" >Удалить</button>`;
-                       
-                    }
-                }
-            })
-        }
+async function loadCarList(regex){
+    let value = document.getElementById('site-search').value;
+    value = value.toUpperCase();
+    value.replace(/\s/g,'');
+    regex = new RegExp(`${value}`, 'g');
+    const results =  await query('GET','/carsData');
+    const data = $_GET(['carList']);
+    document.querySelector(`.list`).innerHTML='';
+    function createTable(arg) {let box = document.createElement('table');
+        box.setAttribute("id",`car-boxList-${arg.id}`)
+        box.className = 'car-boxList';
+        document.querySelector(`.list`).appendChild(box);
+        document.querySelector(`#car-boxList-${arg.id}`).insertAdjacentHTML("beforeend", '<tr class="headerTable"><th>Марка машины</th><th>Номер машины</th><th>Объем, м³</th></tr>')
+        document.querySelector(`#car-boxList-${arg.id}`).insertAdjacentHTML("beforeend", `<tr class="headerTable"><td cosplan="2">${arg['Марка машины']}</td><td cosplan="2">${arg['Номер машины']}</td><td cosplan ="2">${arg['Объем, м3']}</td></tr>`)
+        document.querySelector(`#car-boxList-${arg.id}`).insertAdjacentHTML("beforeend", `<button class="btn" onclick="deleteCar(${arg.id},${arg.orderId})" >Удалить</button>`)
     }
-    xhttp.open('GET','/carsData',true);
-    xhttp.send()
-};
+    results.forEach(elem => {
+        if(data == elem.orderId){
+            if (elem['Номер машины'] !== null){
+                if (elem['Номер машины'].replace(/\s/g,'').match(regex)){
+                    createTable(elem);
+                } 
+                else if (value === ''){
+                    createTable(elem);
+            }
+       
+            }
+        }
+    })
+}
 
 function addCar(){
     const carNumber = document.getElementById('carNumber').value;
@@ -92,7 +79,25 @@ function addCar(){
     xhttp.open('POST','/addCar',true);
     xhttp.setRequestHeader("Content-Type","application/json")
     xhttp.send(`{"carId": ${carId},"carNumber": "${carNumber.toUpperCase()}", "carVolume": ${carVolume}, "carMark": "${carMark.toUpperCase()}"}`)
-} else {
-    alert('Номер машины должен быть "x 000 xx 00"')
+    } else {
+        alert('Номер машины должен быть "x 000 xx 00"')
+    }
 }
+
+async function deleteCar(carId, orderId ){
+    await query ('POST','/deleteCar',`{"carId": ${carId},"carOrderId": ${orderId}}`);
+    loadCarList ();
+}
+
+function searchCars(){
+    let data = document.getElementById('site-search').value;
+    data = data.toUpperCase();
+    data.replace(/\s/g,'');
+    const regex = new RegExp(`${data}`, 'g');
+
+    if(data !== '' ){
+        loadCarList (regex)
+    }  else {
+        loadCarList ('')
+    }
 }

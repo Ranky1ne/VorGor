@@ -24,6 +24,11 @@ function changeOrder(){
             document.querySelector('#changeVolume').value = results[0].Объем;
             document.querySelector('#changeRawMaterial').value = results[0].Сырье;
             document.querySelector('#changeAdress').value = results[0]['Адрес'];
+            if (results[0].printId === 'delivery'){
+                document.querySelector(`#adress-div`).insertAdjacentHTML("afterend", '<input type="radio" name="printId" value="delivery" checked>Доставка<input type="radio" name="printId" value="pickup" >Самовывоз')
+            } else {
+                document.querySelector(`#adress-div`).insertAdjacentHTML("afterend", '<input type="radio" name="printId" value="delivery" >Доставка<input type="radio" name="printId" value="pickup" checked>Самовывоз')
+            }
         }
     }
     xhttp.open('POST','/orderData',true);

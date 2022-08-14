@@ -1,78 +1,81 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Список Машин</title>
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    <link rel="icon" href="../favicon/favicon-32x32.png" type="image/png">
-    <!-- Google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- CSS -->
-    <link rel="stylesheet" href="/css/main.css">
-    <link href="/css/carList.css" rel="stylesheet" type="text/css">
-    <!-- JS -->
-    <script src="/API/carList.js"></script>
-        
-	</head>
-    <body onload="loadCarList()">
-        
-        <div class="burger-menu">
-            <a href="" class="burger-menu_button">
-              <spun class="burger-menu_lines"></spun>
-            </a>
-            <nav class="burger-menu_nav">
-              <a href="/home" class="burger-menu_link">Заявки</a>
-              <a href="/newForm" class="burger-menu_link">Новая заявка</a>
-              <a href="/operator" class="burger-menu_link">Оператор</a>
-   
-              <form action="/exit"><a href="/" action class="burger-menu_link5">Выход</a></form>
-            </nav>
-            <div class="burger-menu_overlay"></div>
-          </div>
-        
-          
-        <div class="container">
-          <div class="main">
-                <input class="search" type="search" id="site-search" oninput="" placeholder="Поиск машин">
-                <div class="d-flex">
-                  <div>
-                    <div class="l-flex">
-                      <div class="col first-col">
-                        <h3>Марка машины</h3>
-                        <input name="carMark" id="carMark" type="text" required>
-                      </div>
-                        <div class="col second-col">
-                          <h3>Номер машины</h3>
-                          <input name="carNumber" id="carNumber" type="text" required>
-                        </div>
-                        <div class="col third-col">
-                          <h3>Объем, м³</h3>
-                          <input type="number" min="0"  name="carVolume" id="carVolume" required>
-                        </div>
-                      </div>
-                      <input name="carId" id="carId" type="hidden">
-                      <button class="btn" onclick="addCar()">Сохранить</button>
-                    </div>
-            
-                <div class="carList">
-                    <table class="list" id="tableList">
-                        
-                    </table>
-                </div>
 
+<head>
+  <meta charset="utf-8">
+  <title>Список Машин</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+  <link rel="icon" href="../favicon/favicon-32x32.png" type="image/png">
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="/css/carList.css" rel="stylesheet" type="text/css">
+  <!-- JS -->
+  <script src="/API/carList.js"></script>
+
+</head>
+
+<body onload="loadCarList()">
+
+  <div class="burger-menu">
+    <a href="" class="burger-menu_button">
+      <spun class="burger-menu_lines"></spun>
+    </a>
+    <nav class="burger-menu_nav">
+      <a href="/home" class="burger-menu_link">Заявки</a>
+      <a href="/newForm" class="burger-menu_link">Новая заявка</a>
+      <a href="/operator" class="burger-menu_link">Оператор</a>
+
+      <form action="/exit"><a href="/" action class="burger-menu_link5">Выход</a></form>
+    </nav>
+    <div class="burger-menu_overlay"></div>
+  </div>
+
+
+  <div class="container">
+    <div class="main">
+      <input class="search" type="search" id="site-search" oninput="searchCars()" placeholder="Поиск машин">
+      <div class="d-flex">
+        <div class="input-car">
+          <div class="l-flex">
+            <div class="col first-col">
+              <h3>Марка машины</h3>
+              <input name="carMark" id="carMark" type="text" autocomplete required>
             </div>
-            
-
+            <div class="col second-col">
+              <h3>Номер машины</h3>
+              <input name="carNumber" id="carNumber" type="text" autocomplete required>
+            </div>
+            <div class="col third-col">
+              <h3>Объем, м³</h3>
+              <input type="number" min="0" name="carVolume" id="carVolume" autocomplete required>
+            </div>
           </div>
+          <button class="btn" onclick="addCar()">Сохранить</button>
         </div>
-        
 
-      <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="/API/home.js"></script>
-    
 
-    </body>
+        <div class="list" id="tableList">
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <script
+    src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/API/home.js"></script>
+
+
+</body>
+
 </html>

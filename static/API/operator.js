@@ -1,25 +1,24 @@
 let descSwich = 1;
 
-const  getData = async ()=>{
+const query =(type,query,arg)=>{
+    return new Promise((resolve, reject) => { 
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            if (arg === undefined){
+            const result = this.responseText;
+            const results = JSON.parse(result);
+            resolve (results);
+            } else {
+                resolve()
+            }
+        }}
+    xhttp.open(type,query,true);
+    xhttp.setRequestHeader("Content-Type","application/json");
+    xhttp.send(arg)
+    
    
-const query =()=>{
-        return new Promise((resolve, reject) => { 
-        let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function(){
-            if(this.readyState == 4 && this.status == 200){
-                const result = this.responseText;
-                const results = JSON.parse(result);
-                resolve (results);
-            }}
-        xhttp.open('GET','/carsData',true);
-        xhttp.send()
-        
-       
-        })
-    }
-    const results = await query();
-   return results;
-
+    })
 }
 
 const CarrierCustomerSlice =(arg)=>{
@@ -38,7 +37,7 @@ const CarrierCustomerSlice =(arg)=>{
         volume.className = 'card-volume';
     
     const indBr = arg['Перевозчик'].indexOf(','),
-    indBr2 = arg['Заказчик'].indexOf('ИНН');
+    indBr2 = arg['Заказчик'].indexOf(',');
     if (indBr === -1){
         textString3 = document.createTextNode('Перевозчик: '+ arg['Перевозчик']);
     } else {
@@ -70,7 +69,7 @@ const CarrierCustomerSlice =(arg)=>{
 }
 
 async function loadCars (regex){
-    const results = await getData();
+    const results = await query('GET','/carsData');
     document.getElementById('main').innerHTML = '';
 
     function createTable(elem){
@@ -98,11 +97,10 @@ async function loadCars (regex){
 }
 
 async function loadCarOnObject (regex){
-    const results = await getData();
+    const results = await query('GET','/carsData');
     document.getElementById('main').innerHTML = '';
     function createTable(elem){
         document.getElementById('main').insertAdjacentHTML('afterbegin',`<button class="main-car-button" id="car${elem.id}" ondblclick="moveCarBack(${elem.id})"></button>`)
-        
         const blockButt = document.createElement('div');
         blockButt.className = 'print-butt';
         blockButt.innerHTML = `<button class="print-btn" onclick="printFile(${elem.id},${elem.orderId},${elem['Объем, м3']})">Печать</button>`;
@@ -129,30 +127,14 @@ async function loadCarOnObject (regex){
     descSwich = 0;
 }
 
-function moveCar(carId){
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-        
-        if(this.readyState == 4 && this.status == 200){
-            loadCars()
-        }}
-      
-        xhttp.open('POST','/moveCars',true);
-        xhttp.setRequestHeader("Content-Type","application/json")
-        xhttp.send(`{"carId": ${carId}}`)
-      
+async function moveCar(carId){
+    await query('POST','/moveCars',`{"carId": ${carId}}`);
+    loadCars()    
 }
 
-function moveCarBack(carId){
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-        if(this.readyState == 4 && this.status == 200){
-            loadCarOnObject()
-        }}
-        xhttp.open('POST','/moveCarsBack',true);
-        xhttp.setRequestHeader("Content-Type","application/json")
-        xhttp.send(`{"carId": ${carId}}`)
-      
+async function moveCarBack(carId){
+    await query('POST','/moveCarsBack',`{"carId": ${carId}}`);
+    loadCarOnObject()    
 }
 
 function searchCars(){
@@ -176,7 +158,7 @@ function searchCars(){
 
 
 async function printFile (carId,orderId, volume) {
-    const allCarsData = await getData();
+    const allCarsData = await query('GET','/carsData');
     const term = window.open(`/printTTN?carId=${carId}&orderId=${orderId}&volume=${volume}`);
 }
 
