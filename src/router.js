@@ -20,6 +20,7 @@ import { carsData } from "./handlers/get/carsData.js";
 import { homeData } from "./handlers/get/homeData.js";
 import { dataPrinting } from "./handlers/dataPrinting.js";
 import { journal } from "./handlers/get/journal.js";
+import { exit } from "./handlers/get/exit.js";
 
 
 export const router = Router();
@@ -44,5 +45,6 @@ router.get ('/carsData', carsData);
 router.get ('/homeData', homeData);
 router.post ('/dataPrinting', dataPrinting);
 router.get ('/journal', journal);
+router.get ('/exit', exit);
 
 
