@@ -35,7 +35,18 @@ function $_GET(arr) {
     const [carId, orderId, volume ] =  $_GET(['carId','orderId','volume']);
     const carsData =await query('GET','/carsData');
     const orderData = await query('GET','/homeData');
-    const date = now.getHours() + ':'+ now.getMinutes()+' '+ now.getDate()+ '/' + (now.getMonth()+1)+ '/' + now.getFullYear();
+    let hour,minutes;
+    if(now.getHours()<10){
+         hour='0'+now.getHours();
+    } else {
+         hour=now.getHours();
+    }
+    if(now.getMinutes()<10){
+        minutes='0'+now.getMinutes();
+   } else {
+        minutes=now.getMinutes();
+   }
+    const date = hour + ':'+ minutes +' '+ now.getDate()+ '/' + (now.getMonth()+1)+ '/' + now.getFullYear();
     const car = carsData.filter(elem =>{
        if (elem.id == carId){ 
         return elem;
@@ -61,6 +72,7 @@ function $_GET(arr) {
     document.getElementById('date-for-pirnt1').textContent= date; 
     document.getElementById('date-for-pirnt2').textContent= date; 
     document.getElementById('date-for-pirnt3').textContent= now.getDate()+ '/' + (now.getMonth()+1)+ '/' + now.getFullYear();  
+    document.getElementById('date-for-pirnt10').textContent= now.getDate()+ '/' + (now.getMonth()+1)+ '/' + now.getFullYear();  
     document.getElementById('date-for-pirnt4').textContent= date;  
     document.getElementById('date-for-pirnt5').textContent= date;  
     document.getElementById('date-for-pirnt6').textContent= date;  
@@ -73,6 +85,7 @@ function $_GET(arr) {
     document.getElementById('volumeCar').textContent= volume;
     document.getElementById('volumeCar1').textContent= volume;
     document.getElementById('volumeCar2').textContent= volume;
+    document.getElementById('volumeCar3').textContent= volume;
     document.getElementById('adress').textContent= order[0]['Адрес'];
     document.getElementById('carNumber').textContent= car[0]['Номер машины'];
     document.getElementById('carrier').textContent= order[0]['Перевозчик'];
@@ -83,11 +96,11 @@ function $_GET(arr) {
       : document.getElementById('printId').textContent= 'САМОВЫВОЗ';
      
     await query('POST','/dataPrinting',`{"carId": ${carId}, "orderId": ${orderId},"volume": ${volume},"numberTTN": ${numberTTN[0]['НомерТТН']}}`);
-    window.print();  
+    // window.print();  
 
 }
 
 window.onafterprint = ()=>{
-     window.close()
+    //  window.close()
 }
 
