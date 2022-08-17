@@ -10,55 +10,34 @@ services:
     restart: always
     depends_on:
       - db
+      
   db:
-
     image: mysql:8.0
-
     container_name: db
-
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-
       MYSQL_ROOT_PASSWORD: 3113
-
       MYSQL_DATABASE: nodelogin
-
       MYSQL_USER: user
-
       MYSQL_PASSWORD: 1331
     restart: always
-
     ports:
-
       - "3306:3306"
-
     volumes:
-
-      - dbdata:/var/lib/mysql
+      - ./dbdata:/var/lib/mysql
 
   phpmyadmin:
-
     image: phpmyadmin/phpmyadmin
-
     container_name: pma
-
     links:
-
       - db
-
     environment:
-
       PMA_HOST: db
-
       PMA_PORT: 3306
-
       PMA_ARBITRARY: 1
-
     restart: always
-
     ports:
-
       - 8081:80
 
 volumes:
-
   dbdata:
