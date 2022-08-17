@@ -1,8 +1,8 @@
 import { createConnection } from "mysql";
 
 export const connection = createConnection({
-  host: "localhost",
+  host: "db",
   user: "root",
-  password: "",
+  password: "3113",
   database: "nodelogin",
 });
