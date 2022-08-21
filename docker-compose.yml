@@ -16,7 +16,7 @@ services:
     container_name: db
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: 3113
+      MYSQL_ROOT_PASSWORD: 
       MYSQL_DATABASE: nodelogin
       MYSQL_USER: user
       MYSQL_PASSWORD: 1331
