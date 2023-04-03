@@ -1,10 +1,4 @@
 import http from "http";
-
-
-// По поводу линтинга, добавил тебе свой обычный конфиг в .prettierrc
-// Посмотри как в вскоде работает https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
-// Желательно еще себе добавить eslint. Посмотри роличек какой-нибудь в ютубе потом про него.
-
 import express from "express";
 import session from "express-session";
 import path from "path";
